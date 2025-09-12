@@ -1,49 +1,65 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+
 
 const CountryModal = ({ countryName, setShow }) => {
   const [countryData, setCountryData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   async function getCountryDetails() {
-    //2
     setLoading(true);
-    const res = await fetch(
-      `https://restcountries.com/v3.1/name/${countryName?.toLocaleLowerCase()}?fullText=true`
-    );
-    const data = await res.json();
-    console.log(data);
-    setLoading(false);
-    setCountryData(data[0]);
+    try {
+      const res = await fetch(
+        `https://restcountries.com/v3.1/name/${countryName?.toLowerCase()}?fullText=true`
+      );
+      const data = await res.json();
+      setCountryData(data[0]);
+    } catch (error) {
+      console.error("Failed to fetch country data:", error);
+    } finally {
+      setLoading(false);
+    }
   }
-  //1st
-   useEffect(() => {
+
+  useEffect(() => {
     getCountryDetails();
   }, [countryName]);
 
   return (
-    <div className="fixed flex overflow-hidden rounded-b-4xl rounded-t-4xl flex-col gap-2 top-1/2 p-6 rounded-lg bg-zinc-800 text-white z-10 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-      {loading && (
-        <div className="absolute inset-0 bg-black z-15 flex items-center justify-center">
-          Loading..
-        </div>
-      )}
-      <img src={countryData?.flags?.png} alt="" />
-      <p className="text-2xl font-semibold text-center">{countryName}</p>
-      <p className="text-sm text-zinc-400 text-center italic">POPULATION: {countryData?.population?.toLocaleString()}</p>
-      <p className="text-sm text-zinc-400 text-center italic">REGION: {countryData?.region}</p>
-       <p className="text-sm text-zinc-400 text-center italic">CAPITAL: {countryData?.capital}</p>
-    <div className="flex justify-center mt-4">
-
-    <NavLink
-  to="/"
-  onClick={() => setShow(false)}
-  className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 rounded text-white transition"
->
-  GO BACK
-</NavLink>
-</div>
-</div>
-
+    <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+      <div className="relative bg-zinc-800 text-white rounded-3xl shadow-2xl w-full max-w-md p-6">
+        {loading ? (
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-10 flex items-center justify-center text-white text-lg font-semibold">
+            Loading...
+          </div>
+        ) : (
+          <>
+            <img
+              src={countryData?.flags?.png}
+              alt={`Flag of ${countryName}`}
+              className="w-full h-54 object-cover rounded-xl shadow-md"
+            />
+            <p className="text-2xl font-semibold text-center mt-2">{countryName}</p>
+            <p className="text-sm text-zinc-400 text-center italic">
+              POPULATION: {countryData?.population?.toLocaleString()}
+            </p>
+            <p className="text-sm text-zinc-400 text-center italic">
+              REGION: {countryData?.region}
+            </p>
+            <p className="text-sm text-zinc-400 text-center italic">
+              CAPITAL: {countryData?.capital?.[0] || "N/A"}
+            </p>
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={() => setShow(false)}
+                className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 rounded transition"
+              >
+                GO BACK
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 

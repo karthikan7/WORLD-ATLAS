@@ -1,39 +1,55 @@
-import CountryModal from "./CountryModal";
 import { useEffect, useRef, useState } from "react";
+import CountryModal from "./CountryModal";
+
 const Worldmap = () => {
   const svgRef = useRef();
-  const [selectedCoutry, setSelectedCountry] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleCountryClick = (event) => {
     const countryName = event.target.getAttribute("data-name");
-    setSelectedCountry(countryName);
+    if (countryName) {
+      setSelectedCountry(countryName);
+    }
   };
 
   useEffect(() => {
-    const countriesGroup = svgRef.current?.getElementById("countries");
+    const svgElement = svgRef.current;
+    if (!svgElement) return;
+
+    const countriesGroup = svgElement.querySelector("#countries");
     if (!countriesGroup) return;
 
     const countryPaths = countriesGroup.querySelectorAll("path");
-
-    countryPaths.forEach((path) => {
-      path.addEventListener("click", handleCountryClick);
-    });
+    countryPaths.forEach((path) => path.addEventListener("click", handleCountryClick));
 
     return () => {
-      countryPaths.forEach((path) => {
-        path.removeEventListener("click", handleCountryClick);
-      });
+      countryPaths.forEach((path) => path.removeEventListener("click", handleCountryClick));
     };
   }, []);
 
   return (
-    <div className="container w-screen mx-auto">
-        <div className="text-5xl py-6 mb-4
-        
-         font-bold text-center">World Map</div>
-      {selectedCoutry != null && (
-        <CountryModal countryName={selectedCoutry}></CountryModal>
+    <div className="w-full px-4 sm:px-8 py-8 bg-black min-h-screen">
+      <h2 className="text-3xl sm:text-5xl font-bold text-center text-white mb-6">World Map</h2>
+      <svg ref={svgRef} className="w-full h-auto bg-transparent">
+        <g id="countries">
+          {/* Replace with actual SVG paths */}
+          <path data-name="India" d="M10,10 L50,10 L50,50 L10,50 Z" fill="#e11d48" stroke="#fff" />
+          <path data-name="France" d="M60,10 L100,10 L100,50 L60,50 Z" fill="#3b82f6" stroke="#fff" />
+        </g>
+      </svg>
+
+      {selectedCountry && (
+        <CountryModal
+          countryName={selectedCountry}
+          setShow={() => setSelectedCountry(null)}
+        />
       )}
+
+
+ 
+
+    
+
       <svg
         enable_background="new 0 0 1000 647"
         pretty_print="False"

@@ -1,14 +1,12 @@
 import React from "react";
 import { useGlobalcontext } from "../components/Ui/Context";
-import { NavLink } from "react-router-dom";
 
 const CountryList = () => {
   const { countryData, isLoading, query, setQuery } = useGlobalcontext();
 
   return (
-    <section className="py-10 px-4">
-      
-      <div className="max-w-xl mx-auto mb-10">
+    <section className="py-12 px-6 bg-gradient-to-br from-[#0f0f0f] to-[#1a1a1a] min-h-screen">
+      <div className="max-w-xl mx-auto mb-12">
         <input
           type="text"
           placeholder="Search countries..."
@@ -18,7 +16,6 @@ const CountryList = () => {
         />
       </div>
 
-      
       {isLoading ? (
         <div className="text-center text-white text-xl font-semibold">Loading...</div>
       ) : countryData.length === 0 ? (
@@ -27,7 +24,7 @@ const CountryList = () => {
         </div>
       ) : (
         <div
-          className={`flex flex-wrap gap-10 ${
+          className={`flex flex-wrap gap-16 justify-center max-w-[1600px] mx-auto ${
             countryData.length === 1 ? "justify-center" : "justify-between"
           }`}
         >
@@ -38,45 +35,43 @@ const CountryList = () => {
               region,
               subregion,
               population,
-              cca3,
               capital,
               continents,
               altSpellings,
             } = country;
 
             return (
-              <NavLink
-                to={`/country/${cca3}`}
-                key={cca3}
-                className="w-[380px] h-[480px] rounded-3xl border border-white/30 bg-white/5 backdrop-blur-md shadow-2xl hover:shadow-white/30 hover:translate-y-1 transition-all duration-300 group overflow-hidden"
+              <div
+                key={common}
+                className="w-[360px] h-[500px] rounded-3xl border border-white/20 bg-white/5 backdrop-blur-xl shadow-[0_0_40px_rgba(255,255,255,0.05)] hover:shadow-[0_0_60px_rgba(255,255,255,0.2)] hover:scale-[1.02] transition-all duration-300 group overflow-hidden relative"
               >
-                <div className="flex flex-col h-full justify-between">
-                  
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/0 pointer-events-none rounded-3xl" />
+
+                <div className="flex flex-col h-full justify-between relative z-10">
                   <div>
-                    <h2 className="text-center text-lg font-semibold my-4 text-white group-hover:scale-105 transition-transform">
-                      {common?.length > 15 ? `${common.substring(0, 15)}...` : common}
+                    <h2 className="text-center text-xl font-semibold my-5 text-white tracking-wide group-hover:scale-105 transition-transform">
+                      {common?.length > 18 ? `${common.substring(0, 18)}...` : common}
                     </h2>
-                    
-                    <div className="overflow-hidden rounded-xl flex justify-center">
+
+                    <div className="overflow-hidden rounded-xl flex justify-center px-4">
                       <img
                         src={png}
                         alt={alt || `Flag of ${common}`}
-                        className="w-[240px] h-[120px] object-contain group-hover:scale-105 transition-transform duration-300"
+                        className="w-[260px] h-[140px] object-contain rounded-xl shadow-md group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   </div>
 
-                  
-                  <div className="px-5 pb-5 text-sm text-white/80 space-y-1">
-                    <p><strong>Capital:</strong> {capital?.[0] || "N/A"}</p>
-                    <p><strong>Region:</strong> {region || "N/A"}</p>
-                    <p><strong>Subregion:</strong> {subregion || "N/A"}</p>
-                    <p><strong>Continent:</strong> {continents?.[0] || "N/A"}</p>
-                    <p><strong>Population:</strong> {population?.toLocaleString() || "N/A"}</p>
-                    <p><strong>Also known as:</strong> {altSpellings?.slice(0, 3).join(", ") || "—"}</p>
+                  <div className="px-6 pb-6 text-sm text-white/80 space-y-2 leading-relaxed">
+                    <p><span className="text-white font-medium">Capital:</span> {capital?.[0] || "N/A"}</p>
+                    <p><span className="text-white font-medium">Region:</span> {region || "N/A"}</p>
+                    <p><span className="text-white font-medium">Subregion:</span> {subregion || "N/A"}</p>
+                    <p><span className="text-white font-medium">Continent:</span> {continents?.[0] || "N/A"}</p>
+                    <p><span className="text-white font-medium">Population:</span> {population?.toLocaleString() || "N/A"}</p>
+                    <p><span className="text-white font-medium">Also known as:</span> {altSpellings?.slice(0, 3).join(", ") || "—"}</p>
                   </div>
                 </div>
-              </NavLink>
+              </div>
             );
           })}
         </div>

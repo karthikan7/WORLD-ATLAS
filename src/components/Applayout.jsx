@@ -6,8 +6,8 @@ export const Applayout = () => {
   return (
     <>
       <Header />
-      <main className="min-h-[calc(100vh-160px)] text-white bg-black"> 
-        <Outlet />{/* here the all pages will render */}
+      <main className="min-h-[calc(100vh-160px)] text-white bg-black">
+        <Outlet />
       </main>
       <Footer />
     </>
