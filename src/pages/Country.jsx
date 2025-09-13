@@ -28,17 +28,26 @@ const CountryList = () => {
             countryData.length === 1 ? "justify-center" : "justify-between"
           }`}
         >
+          
           {countryData.map((country) => {
             const {
               name: { common } = {},
               flags: { png, alt } = {},
               region,
-              subregion,
               population,
               capital,
-              continents,
               altSpellings,
+              currencies,
+              timezones,
             } = country;
+
+            const currencyDisplay = currencies
+              ? Object.values(currencies)
+                  .map((cur) => `${cur.name} (${cur.symbol})`)
+                  .join(", ")
+              : "N/A";
+
+            const timezoneDisplay = timezones?.join(", ") || "N/A";
 
             return (
               <div
@@ -65,8 +74,8 @@ const CountryList = () => {
                   <div className="px-6 pb-6 text-sm text-white/80 space-y-2 leading-relaxed">
                     <p><span className="text-white font-medium">Capital:</span> {capital?.[0] || "N/A"}</p>
                     <p><span className="text-white font-medium">Region:</span> {region || "N/A"}</p>
-                    <p><span className="text-white font-medium">Subregion:</span> {subregion || "N/A"}</p>
-                    <p><span className="text-white font-medium">Continent:</span> {continents?.[0] || "N/A"}</p>
+                    <p><span className="text-white font-medium">Currency:</span> {currencyDisplay}</p>
+                    <p><span className="text-white font-medium">Timezones:</span> {timezoneDisplay}</p>
                     <p><span className="text-white font-medium">Population:</span> {population?.toLocaleString() || "N/A"}</p>
                     <p><span className="text-white font-medium">Also known as:</span> {altSpellings?.slice(0, 3).join(", ") || "—"}</p>
                   </div>

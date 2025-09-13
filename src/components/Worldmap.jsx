@@ -45,11 +45,6 @@ const Worldmap = () => {
         />
       )}
 
-
- 
-
-    
-
       <svg
         enable_background="new 0 0 1000 647"
         pretty_print="False"
